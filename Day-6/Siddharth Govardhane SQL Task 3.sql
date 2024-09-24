@@ -50,6 +50,11 @@ on a.account_id = t.account_id
 group by account_id
 order by transaction_count desc;
 
+select sum(case when transaction_type = 'deposit' then amount else 0 end) - 
+       sum(case when transaction_type = 'withdrawal' then amount else 0 end) as difference
+from transactions;
+
+
 select transaction_date, amount, account_id, count(*) as duplicate_count
 from transactions
 group by amount, transaction_date, account_id
