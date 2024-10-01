@@ -1,41 +1,47 @@
 package com.hexaware.vehicleRS;
 
-public class Bike extends Vehicle{
-	
-	private double userBalance;
-	
-	public Bike(String vehicleID, double rentPrice, double userBalance) {
-		super(vehicleID, rentPrice);
-		this.userBalance = userBalance;
-	}
-	
-	@Override
-	public void rentVehicle() {
-		
-		if(!isRented()) {
-			if(userBalance > getRentPrice()) {
-				userBalance -= getRentPrice();
-				setRented(true);
-				System.out.println(getVehicleID() + " has been rented. Remaining balance: " + userBalance);
-			}else {
-				System.out.println("Insufficient balance to rent " + getVehicleID());
-			}
-		}else {
-			System.out.println(getVehicleID() + "is already rented.");
-		}
-		
-	}
-	
-	@Override
-	public void returnVehicle() {
-		
-		if(!isRented()) {
-			setRented(false);
-			System.out.println(getVehicleID() + "has been returned");
-		}else {
-			System.out.println(getVehicleID() + "was not rented out");
-		}
-		
-	}
+import com.hexaware.exceptions.InsufficientBalanceException;
+import com.hexaware.exceptions.VehicleAlreadyRentedException;
 
+public class Bike extends Vehicle {
+    
+    private double userBalance;
+    
+    public Bike(String vehicleID, double rentPrice, double userBalance) {
+        super(vehicleID, rentPrice);
+        this.userBalance = userBalance;
+    }
+    
+    @Override
+    public void rentVehicle() {
+        try {
+            if (!isRented()) {
+                if (userBalance >= getRentPrice()) {
+                    userBalance -= getRentPrice();
+                    setRented(true);
+                    System.out.println(getVehicleID() + " has been rented. Remaining balance: " + userBalance);
+                } else {
+                    throw new InsufficientBalanceException("Insufficient balance to rent " + getVehicleID());
+                }
+            } else {
+                throw new VehicleAlreadyRentedException(getVehicleID() + " is already rented.");
+            }
+        } catch (InsufficientBalanceException | VehicleAlreadyRentedException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    @Override
+    public void returnVehicle() {
+        try {
+            if (isRented()) {
+                setRented(false);
+                System.out.println(getVehicleID() + " has been returned.");
+            } else {
+                throw new VehicleAlreadyRentedException(getVehicleID() + " was not rented.");
+            }
+        } catch (VehicleAlreadyRentedException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
