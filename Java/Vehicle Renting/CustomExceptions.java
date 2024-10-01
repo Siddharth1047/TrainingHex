@@ -21,13 +21,6 @@ class MaxVehiclesRentedException extends Exception {
     }
 }
 
-// Custom exception: VehicleAlreadyRentedException
-class VehicleAlreadyRentedException extends Exception {
-    public VehicleAlreadyRentedException(String message) {
-        super(message);
-    }
-}
-
 // Custom exception: VehicleNotRentedException
 class VehicleNotRentedException extends Exception {
     public VehicleNotRentedException(String message) {
